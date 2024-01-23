@@ -6,6 +6,13 @@ const fileCopyPath = path.join(__dirname, 'files-copy');
 
 async function copyDir() {
   const files = await fs.opendir(filePath);
+  const filesCopy = await fs.opendir(fileCopyPath);
+
+  for await (const file of filesCopy) {
+    await fs.unlink(path.join(fileCopyPath, file.name));
+
+    console.log(`${file.name} - deleted from "files-copy"`);
+  }
 
   for await (const file of files) {
     const exampleFile = path.join(filePath, file.name);
